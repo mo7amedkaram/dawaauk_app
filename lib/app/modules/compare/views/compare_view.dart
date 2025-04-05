@@ -6,19 +6,21 @@ import '../../../components/loader.dart';
 import '../../../components/error_view.dart';
 
 class CompareView extends GetView<CompareController> {
+  const CompareView({super.key});
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('مقارنة الأدوية'),
+        title: const Text('مقارنة الأدوية'),
         centerTitle: true,
         elevation: 0,
       ),
       body: controller.obx(
         (state) => _buildContent(context),
-        onLoading: Loader(message: 'جاري تحميل بيانات المقارنة...'),
+        onLoading: const Loader(message: 'جاري تحميل بيانات المقارنة...'),
         onError: (error) => ErrorView(
           message: controller.errorMessage.value,
           onRetry: controller.refreshData,
@@ -32,7 +34,7 @@ class CompareView extends GetView<CompareController> {
 
     return Obx(() {
       if (controller.medications.isEmpty) {
-        return Center(
+        return const Center(
           child: Text('لا توجد أدوية للمقارنة'),
         );
       }
@@ -41,7 +43,7 @@ class CompareView extends GetView<CompareController> {
         children: [
           // Compare options
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
               color: theme.colorScheme.primary.withOpacity(0.1),
             ),
@@ -68,7 +70,7 @@ class CompareView extends GetView<CompareController> {
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -77,7 +79,7 @@ class CompareView extends GetView<CompareController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Property column
-                        Container(
+                        SizedBox(
                           width: 120,
                           child: Text('المقارنة',
                               style: theme.textTheme.titleMedium),
@@ -92,7 +94,7 @@ class CompareView extends GetView<CompareController> {
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Padding(
-                                padding: EdgeInsets.all(12),
+                                padding: const EdgeInsets.all(12),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
@@ -111,16 +113,17 @@ class CompareView extends GetView<CompareController> {
                                         ),
                                         if (controller.medications.length > 2)
                                           IconButton(
-                                            icon: Icon(Icons.close, size: 18),
+                                            icon: const Icon(Icons.close,
+                                                size: 18),
                                             padding: EdgeInsets.zero,
-                                            constraints: BoxConstraints(),
+                                            constraints: const BoxConstraints(),
                                             onPressed: () => controller
                                                 .removeMedicationFromComparison(
                                                     medication.id),
                                           ),
                                       ],
                                     ),
-                                    SizedBox(height: 4),
+                                    const SizedBox(height: 4),
                                     Text(
                                       medication.scientificName,
                                       style:
@@ -132,14 +135,14 @@ class CompareView extends GetView<CompareController> {
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     TextButton(
-                                      child: Text('عرض التفاصيل'),
                                       onPressed: () => Get.toNamed(
                                           '/details/${medication.id}'),
                                       style: TextButton.styleFrom(
-                                        padding: EdgeInsets.symmetric(
+                                        padding: const EdgeInsets.symmetric(
                                             horizontal: 8, vertical: 4),
-                                        minimumSize: Size(0, 0),
+                                        minimumSize: const Size(0, 0),
                                       ),
+                                      child: const Text('عرض التفاصيل'),
                                     ),
                                   ],
                                 ),
@@ -150,7 +153,7 @@ class CompareView extends GetView<CompareController> {
                       ],
                     ),
 
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
                     // Basic info comparison
                     _buildComparisonSection(context, 'معلومات أساسية', [
@@ -176,7 +179,7 @@ class CompareView extends GetView<CompareController> {
                         ),
                     ]),
 
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
                     // Details comparison (if available)
                     if (_hasAnyMedicationDetails() &&
@@ -260,7 +263,7 @@ class CompareView extends GetView<CompareController> {
               title,
               style: theme.textTheme.titleLarge,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ...rows,
           ],
         ),
@@ -310,7 +313,7 @@ class CompareView extends GetView<CompareController> {
             isLongText ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: [
           // Property name
-          Container(
+          SizedBox(
             width: 120,
             child: Text(
               property,
@@ -347,7 +350,7 @@ class CompareView extends GetView<CompareController> {
 
             return Expanded(
               child: Container(
-                padding: EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: theme.colorScheme.surface,
                   borderRadius: BorderRadius.circular(8),

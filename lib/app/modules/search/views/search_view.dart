@@ -1,6 +1,7 @@
 // lib/app/modules/search/views/search_view.dart
 import 'package:flutter/material.dart' hide SearchController;
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:medication_database/app/components/search_bar.dart';
 import '../controllers/search_controller.dart';
 import '../../../components/loader.dart';
@@ -10,11 +11,13 @@ import '../../../components/medication_card.dart';
 import '../../../components/filter_drawer.dart';
 
 class SearchView extends GetView<SearchController> {
+  const SearchView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('البحث عن الأدوية'),
+        title: const Text('البحث عن الأدوية'),
         centerTitle: true,
         elevation: 0,
       ),
@@ -23,14 +26,14 @@ class SearchView extends GetView<SearchController> {
         children: [
           // Search bar area
           Container(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Theme.of(context).appBarTheme.backgroundColor,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.05),
                   blurRadius: 5,
-                  offset: Offset(0, 2),
+                  offset: const Offset(0, 2),
                 ),
               ],
             ),
@@ -65,7 +68,8 @@ class SearchView extends GetView<SearchController> {
 
             if (hasActiveFilters) {
               return Container(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                 child: Row(
                   children: [
@@ -74,7 +78,7 @@ class SearchView extends GetView<SearchController> {
                       size: 18,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Text(
                       'الفلاتر النشطة',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -82,21 +86,21 @@ class SearchView extends GetView<SearchController> {
                             fontWeight: FontWeight.bold,
                           ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     TextButton(
                       onPressed: controller.resetFilters,
-                      child: Text('إعادة ضبط'),
                       style: TextButton.styleFrom(
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        padding: EdgeInsets.symmetric(horizontal: 8),
-                        minimumSize: Size(0, 0),
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        minimumSize: const Size(0, 0),
                       ),
+                      child: const Text('إعادة ضبط'),
                     ),
                   ],
                 ),
               );
             } else {
-              return SizedBox.shrink();
+              return const SizedBox.shrink();
             }
           }),
 
@@ -104,7 +108,7 @@ class SearchView extends GetView<SearchController> {
           Expanded(
             child: controller.obx(
               (state) => _buildSearchResults(),
-              onLoading: Loader(message: 'جاري البحث...'),
+              onLoading: const Loader(message: 'جاري البحث...'),
               onError: (error) => ErrorView(
                 message: error,
                 onRetry: controller.search,
@@ -113,6 +117,7 @@ class SearchView extends GetView<SearchController> {
                 message: 'لا توجد نتائج للبحث',
                 actionText: 'تعديل معايير البحث',
                 onAction: controller.toggleFilters,
+                customWidget: LottieBuilder.asset(""),
               ),
             ),
           ),
@@ -130,6 +135,7 @@ class SearchView extends GetView<SearchController> {
           message: 'لا توجد نتائج للبحث',
           actionText: 'تعديل معايير البحث',
           onAction: controller.toggleFilters,
+          customWidget: LottieBuilder.asset(""),
         );
       }
 
@@ -156,7 +162,7 @@ class SearchView extends GetView<SearchController> {
           // Results list
           Expanded(
             child: ListView.builder(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               itemCount: results.length,
               itemBuilder: (context, index) {
                 return Padding(
@@ -178,12 +184,12 @@ class SearchView extends GetView<SearchController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.chevron_left),
+                    icon: const Icon(Icons.chevron_left),
                     onPressed: controller.currentPage.value > 1
                         ? controller.previousPage
                         : null,
                   ),
-                  SizedBox(width: 16),
+                  const SizedBox(width: 16),
                   ...List.generate(
                     controller.totalPages.value > 5
                         ? 5
@@ -229,9 +235,9 @@ class SearchView extends GetView<SearchController> {
                       );
                     },
                   ),
-                  SizedBox(width: 16),
+                  const SizedBox(width: 16),
                   IconButton(
-                    icon: Icon(Icons.chevron_right),
+                    icon: const Icon(Icons.chevron_right),
                     onPressed: controller.currentPage.value <
                             controller.totalPages.value
                         ? controller.nextPage

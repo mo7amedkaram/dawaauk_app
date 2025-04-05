@@ -50,22 +50,22 @@ class FilterDrawer extends StatelessWidget {
           children: [
             // Header
             Container(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               color: theme.colorScheme.primary.withOpacity(0.1),
               child: Row(
                 children: [
                   Icon(Icons.filter_list, color: theme.colorScheme.primary),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   Text(
                     'الفلاتر',
                     style: theme.textTheme.titleLarge?.copyWith(
                       color: theme.colorScheme.primary,
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   TextButton(
                     onPressed: onReset,
-                    child: Text('إعادة ضبط'),
+                    child: const Text('إعادة ضبط'),
                   ),
                 ],
               ),
@@ -74,20 +74,20 @@ class FilterDrawer extends StatelessWidget {
             // Filter content
             Expanded(
               child: ListView(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 children: [
                   // Sort by
                   Text(
                     'ترتيب حسب',
                     style: theme.textTheme.titleMedium,
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
                     value: selectedSortOption,
                     decoration: InputDecoration(
                       filled: true,
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -103,28 +103,28 @@ class FilterDrawer extends StatelessWidget {
                       if (value != null) onSortOptionChanged(value);
                     },
                   ),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
                   // Category filter
                   Text(
                     'التصنيف',
                     style: theme.textTheme.titleMedium,
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
                     value: selectedCategory.isEmpty ? null : selectedCategory,
                     decoration: InputDecoration(
                       filled: true,
                       hintText: 'اختر التصنيف',
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
                       ),
                     ),
                     items: [
-                      DropdownMenuItem<String>(
+                      const DropdownMenuItem<String>(
                         value: '',
                         child: Text('جميع التصنيفات'),
                       ),
@@ -139,28 +139,28 @@ class FilterDrawer extends StatelessWidget {
                       onCategoryChanged(value ?? '');
                     },
                   ),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
                   // Company filter
                   Text(
                     'الشركة المصنعة',
                     style: theme.textTheme.titleMedium,
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
                     value: selectedCompany.isEmpty ? null : selectedCompany,
                     decoration: InputDecoration(
                       filled: true,
                       hintText: 'اختر الشركة',
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
                       ),
                     ),
                     items: [
-                      DropdownMenuItem<String>(
+                      const DropdownMenuItem<String>(
                         value: '',
                         child: Text('جميع الشركات'),
                       ),
@@ -176,14 +176,14 @@ class FilterDrawer extends StatelessWidget {
                     },
                     isExpanded: true,
                   ),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
                   // Scientific name filter
                   Text(
                     'المادة الفعالة',
                     style: theme.textTheme.titleMedium,
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
                     value: selectedScientificName.isEmpty
                         ? null
@@ -191,15 +191,15 @@ class FilterDrawer extends StatelessWidget {
                     decoration: InputDecoration(
                       filled: true,
                       hintText: 'اختر المادة الفعالة',
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
                       ),
                     ),
                     items: [
-                      DropdownMenuItem<String>(
+                      const DropdownMenuItem<String>(
                         value: '',
                         child: Text('جميع المواد الفعالة'),
                       ),
@@ -215,7 +215,7 @@ class FilterDrawer extends StatelessWidget {
                     },
                     isExpanded: true,
                   ),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
                   // Price range
                   Row(
@@ -231,7 +231,7 @@ class FilterDrawer extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   RangeSlider(
                     values: priceRange,
                     min: 0,
@@ -250,17 +250,17 @@ class FilterDrawer extends StatelessWidget {
 
             // Apply button
             Container(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
                   onApply();
                   Get.back(); // Close drawer
                 },
-                child: Text('تطبيق الفلاتر'),
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
+                child: const Text('تطبيق الفلاتر'),
               ),
             ),
           ],

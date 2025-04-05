@@ -1,6 +1,7 @@
-// lib/app/modules/home/views/home_view.dart
+// lib/app/modules/home/views/home_view.dart (mise à jour)
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../controllers/home_controller.dart';
 import '../../../components/loader.dart';
 import '../../../components/error_view.dart';
@@ -8,6 +9,7 @@ import '../../../components/medication_card.dart';
 import '../../../components/category_card.dart';
 import '../../../theme/theme_controller.dart';
 import '../../../routes/app_pages.dart';
+import '../../../data/local/database_manager.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
@@ -16,19 +18,17 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     final themeController = ThemeController.to;
     final theme = Theme.of(context);
+    final dbManager = Get.find<DatabaseManager>();
 
-    // معلومات حول حجم الشاشة للتجاوب
+    // Adapter les marges et tailles en fonction de la taille de l'écran
     final screenSize = MediaQuery.of(context).size;
     final isSmallScreen = screenSize.width < 360;
-    final isMediumScreen = screenSize.width >= 360 && screenSize.width < 600;
-
-    // تعديل الهوامش والأحجام بناءً على حجم الشاشة
     final horizontalPadding = isSmallScreen ? 12.0 : 16.0;
     final verticalPadding = isSmallScreen ? 16.0 : 24.0;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("دواؤك"),
+        title: const Text("دواؤك"),
         centerTitle: true,
         elevation: 0,
         actions: [
@@ -42,29 +42,194 @@ class HomeView extends GetView<HomeController> {
           ),
         ],
       ),
+      drawer: _buildMainDrawer(context, dbManager),
       body: controller.obx(
         (state) => _buildContent(context),
-        onLoading: Loader(message: 'جاري تحميل البيانات...'),
+        onLoading: const Loader(message: 'جاري تحميل البيانات...'),
         onError: (error) => ErrorView(
           message: controller.errorMessage.value,
           onRetry: controller.refreshData,
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.search),
         tooltip: 'البحث',
         onPressed: () => Get.toNamed(Routes.SEARCH),
+        child: const Icon(Icons.search),
       ),
       bottomNavigationBar: _buildBottomNavigationBar(context),
     );
   }
 
+  // Menu latéral principal
+  Widget _buildMainDrawer(BuildContext context, DatabaseManager dbManager) {
+    final theme = Theme.of(context);
+
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          // En-tête du drawer
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primary,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'دواؤك',
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  'قاعدة بيانات الأدوية الشاملة',
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: Colors.white.withOpacity(0.9),
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                // Afficher la date de dernière synchronisation
+                Obx(() {
+                  final lastSync = dbManager.lastSyncDate;
+                  return Text(
+                    lastSync != null
+                        ? 'آخر تحديث: ${lastSync.day}/${lastSync.month}/${lastSync.year}'
+                        : 'لم يتم التزامن بعد',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: Colors.white.withOpacity(0.8),
+                    ),
+                  );
+                }),
+              ],
+            ),
+          ),
+
+          // Menu principal
+          ListTile(
+            leading: const Icon(Icons.home),
+            title: const Text('الرئيسية'),
+            onTap: () {
+              Get.back();
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.search),
+            title: const Text('البحث'),
+            onTap: () {
+              Get.back();
+              Get.toNamed(Routes.SEARCH);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.category),
+            title: const Text('التصنيفات'),
+            onTap: () {
+              Get.back();
+              Get.toNamed(Routes.CATEGORIES);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.favorite),
+            title: const Text('المفضلة'),
+            onTap: () {
+              // Suite de lib/app/modules/home/views/home_view.dart (mise à jour)
+
+              Get.back();
+              Get.toNamed(Routes.FAVORITES);
+            },
+          ),
+
+          const Divider(),
+
+          // Section gestion
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.h),
+            child: Text(
+              'إدارة',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.hintColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.assignment),
+            title: const Text('الوصفات الطبية'),
+            onTap: () {
+              Get.back();
+              Get.toNamed(Routes.PRESCRIPTIONS);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.receipt_long),
+            title: const Text('الفواتير'),
+            onTap: () {
+              Get.back();
+              Get.toNamed(Routes.INVOICES);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.analytics),
+            title: const Text('الإحصائيات'),
+            onTap: () {
+              Get.back();
+              Get.toNamed(Routes.STATISTICS);
+            },
+          ),
+
+          const Divider(),
+
+          // Section outils
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.h),
+            child: Text(
+              'أدوات',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.hintColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.sync),
+            title: const Text('تحديث قاعدة البيانات'),
+            onTap: () {
+              Get.back();
+              Get.toNamed(Routes.SYNC);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.help_outline),
+            title: const Text('دليل المستخدم'),
+            onTap: () {
+              Get.back();
+              Get.toNamed(Routes.USER_GUIDE);
+            },
+          ),
+
+          // Section about
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.info_outline),
+            title: const Text('عن التطبيق'),
+            onTap: () {
+              Get.back();
+              _showAboutDialog(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Contenu principal de l'écran d'accueil
   Widget _buildContent(BuildContext context) {
-    // معلومات حول حجم الشاشة للتجاوب
+    // Adapter les marges et tailles en fonction de la taille de l'écran
     final screenSize = MediaQuery.of(context).size;
     final isSmallScreen = screenSize.width < 360;
-
-    // تعديل الهوامش والأحجام بناءً على حجم الشاشة
     final horizontalPadding = isSmallScreen ? 12.0 : 16.0;
     final verticalSpacing = isSmallScreen ? 16.0 : 24.0;
 
@@ -75,34 +240,136 @@ class HomeView extends GetView<HomeController> {
       child: ListView(
         padding: EdgeInsets.all(horizontalPadding),
         children: [
-          // Search bar
+          // Barre de recherche
           _buildSearchBar(context),
           SizedBox(height: verticalSpacing),
 
-          // Categories section
+          // Cartes de raccourcis rapides
+          _buildQuickAccessCards(context),
+          SizedBox(height: verticalSpacing),
+
+          // Section des catégories
           _buildSectionHeader(context, 'التصنيفات', 'عرض الكل', () {
             Get.toNamed(Routes.CATEGORIES);
           }),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           _buildCategoriesGrid(context),
           SizedBox(height: verticalSpacing),
 
-          // Trending medications section
+          // Section des médicaments populaires
           _buildSectionHeader(context, 'الأدوية الشائعة', 'عرض المزيد', () {
             Get.toNamed(Routes.SEARCH, arguments: {'sort': 'visits_desc'});
           }),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           _buildTrendingMedications(context),
           SizedBox(height: verticalSpacing),
 
-          // Most visited medications section
+          // Section des médicaments les plus visités
           _buildSectionHeader(context, 'الأكثر زيارة', 'المزيد', () {
             Get.toNamed(Routes.STATISTICS);
           }),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           _buildMostVisitedMedications(context),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
         ],
+      ),
+    );
+  }
+
+  // Cartes d'accès rapide
+  Widget _buildQuickAccessCards(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return GridView.count(
+      crossAxisCount: 2,
+      mainAxisSpacing: 16,
+      crossAxisSpacing: 16,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      childAspectRatio: 1.6,
+      children: [
+        _buildQuickAccessCard(
+          context,
+          'الوصفات الطبية',
+          'إنشاء وإدارة الوصفات الطبية',
+          Icons.assignment,
+          Colors.blue,
+          () => Get.toNamed(Routes.PRESCRIPTIONS),
+        ),
+        _buildQuickAccessCard(
+          context,
+          'الفواتير',
+          'إدارة الفواتير والمبيعات',
+          Icons.receipt_long,
+          Colors.green,
+          () => Get.toNamed(Routes.INVOICES),
+        ),
+        _buildQuickAccessCard(
+          context,
+          'المفضلة',
+          'الأدوية المفضلة لديك',
+          Icons.favorite,
+          Colors.red,
+          () => Get.toNamed(Routes.FAVORITES),
+        ),
+        _buildQuickAccessCard(
+          context,
+          'الإحصائيات',
+          'تقارير وإحصائيات',
+          Icons.analytics,
+          Colors.purple,
+          () => Get.toNamed(Routes.STATISTICS),
+        ),
+      ],
+    );
+  }
+
+  // Carte d'accès rapide individuelle
+  Widget _buildQuickAccessCard(
+    BuildContext context,
+    String title,
+    String subtitle,
+    IconData icon,
+    Color color,
+    VoidCallback onTap,
+  ) {
+    final theme = Theme.of(context);
+
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16.r),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16.r),
+        child: Padding(
+          padding: EdgeInsets.all(16.r),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                icon,
+                color: color,
+                size: 28.r,
+              ),
+              const Spacer(),
+              Text(
+                title,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 4.h),
+              Text(
+                subtitle,
+                style: theme.textTheme.bodySmall,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -122,14 +389,14 @@ class HomeView extends GetView<HomeController> {
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
               blurRadius: 10,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
             ),
           ],
         ),
         child: Row(
           children: [
             Icon(Icons.search, color: Theme.of(context).hintColor),
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
             Text(
               'ابحث عن دواء...',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -158,14 +425,14 @@ class HomeView extends GetView<HomeController> {
         ),
         TextButton(
           onPressed: onAction,
-          child: Text(actionText),
           style: TextButton.styleFrom(
             padding: EdgeInsets.symmetric(
               horizontal: isSmallScreen ? 8 : 16,
               vertical: isSmallScreen ? 4 : 8,
             ),
-            minimumSize: Size(0, 0),
+            minimumSize: const Size(0, 0),
           ),
+          child: Text(actionText),
         ),
       ],
     );
@@ -174,9 +441,9 @@ class HomeView extends GetView<HomeController> {
   Widget _buildCategoriesGrid(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    // تكييف عدد الأعمدة والنسبة وفقًا لعرض الشاشة
-    int crossAxisCount = 2; // افتراضي
-    double childAspectRatio = 0.8; // افتراضي
+    // Adapter le nombre de colonnes et le ratio en fonction de la largeur de l'écran
+    int crossAxisCount = 2; // Par défaut
+    double childAspectRatio = 0.8; // Par défaut
     double spacing = 12;
 
     if (screenWidth < 360) {
@@ -191,14 +458,14 @@ class HomeView extends GetView<HomeController> {
       final categories = controller.categories;
 
       if (categories.isEmpty) {
-        return Center(
+        return const Center(
           child: Text('لا توجد تصنيفات متاحة'),
         );
       }
 
       return GridView.builder(
         shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: crossAxisCount,
           crossAxisSpacing: spacing,
@@ -224,12 +491,12 @@ class HomeView extends GetView<HomeController> {
       final medications = controller.trendingMedications;
 
       if (medications.isEmpty) {
-        return Center(
+        return const Center(
           child: Text('لا توجد أدوية شائعة متاحة'),
         );
       }
 
-      return Container(
+      return SizedBox(
         height: 270,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
@@ -257,10 +524,9 @@ class HomeView extends GetView<HomeController> {
     return Obx(() {
       final medications = controller.mostVisitedMedications;
 
-      // تحسين - استخدام ListView.builder بدلاً من ListView العادي
       return ListView.builder(
         shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         itemCount: medications.length > 3 ? 3 : medications.length,
         itemBuilder: (context, index) {
           final medication = medications[index];
@@ -275,7 +541,7 @@ class HomeView extends GetView<HomeController> {
                 padding: EdgeInsets.all(isSmallScreen ? 8 : 12),
                 child: Row(
                   children: [
-                    // Rank circle - تعديل الحجم ليناسب الشاشات الصغيرة
+                    // Rank circle - adapter la taille pour les petits écrans
                     Container(
                       width: isSmallScreen ? 32 : 40,
                       height: isSmallScreen ? 32 : 40,
@@ -296,7 +562,7 @@ class HomeView extends GetView<HomeController> {
                     ),
                     SizedBox(width: isSmallScreen ? 8 : 12),
 
-                    // Medication info
+                    // Infos du médicament
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -309,7 +575,7 @@ class HomeView extends GetView<HomeController> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Text(
                             medication.scientificName,
                             style: theme.textTheme.bodyMedium?.copyWith(
@@ -323,7 +589,7 @@ class HomeView extends GetView<HomeController> {
                       ),
                     ),
 
-                    // Visit count
+                    // Nombre de visites
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
@@ -365,14 +631,14 @@ class HomeView extends GetView<HomeController> {
             Get.toNamed(Routes.SEARCH);
             break;
           case 2:
-            Get.toNamed(Routes.CATEGORIES);
+            Get.toNamed(Routes.FAVORITES);
             break;
           case 3:
-            Get.toNamed(Routes.STATISTICS);
+            Get.toNamed(Routes.PRESCRIPTIONS);
             break;
         }
       },
-      items: [
+      items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: 'الرئيسية',
@@ -382,21 +648,54 @@ class HomeView extends GetView<HomeController> {
           label: 'البحث',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.category),
-          label: 'التصنيفات',
+          icon: Icon(Icons.favorite),
+          label: 'المفضلة',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.analytics),
-          label: 'الإحصائيات',
+          icon: Icon(Icons.assignment),
+          label: 'الوصفات',
         ),
       ],
-      // تحسين الأداء - تقليل حجم الخط في الشاشات الصغيرة
+      // Optimiser l'affichage - réduire la taille de la police sur les petits écrans
       selectedLabelStyle: TextStyle(
         fontSize: isSmallScreen ? 10 : 12,
         fontWeight: FontWeight.bold,
       ),
       unselectedLabelStyle: TextStyle(
         fontSize: isSmallScreen ? 10 : 12,
+      ),
+    );
+  }
+
+  // Afficher la boîte de dialogue "À propos"
+  void _showAboutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AboutDialog(
+        applicationName: 'دواؤك',
+        applicationVersion: 'الإصدار 1.0.0',
+        applicationIcon: Image.asset(
+          'assets/images/app_icon.png',
+          width: 48,
+          height: 48,
+        ),
+        children: const [
+          SizedBox(height: 16),
+          Text(
+            'تطبيق شامل لإدارة وحفظ والبحث في قاعدة بيانات الأدوية.',
+          ),
+          SizedBox(height: 8),
+          Text(
+            'تم تطويره خصيصاً للصيدليات والمؤسسات الطبية لتسهيل الوصول إلى معلومات الأدوية.',
+          ),
+          SizedBox(height: 16),
+          Text(
+            '© 2025 جميع الحقوق محفوظة',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
     );
   }

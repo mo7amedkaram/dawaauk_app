@@ -1,5 +1,3 @@
-import 'package:get/get.dart';
-
 // Helper functions for safe type conversion
 int safeParseInt(dynamic value) {
   if (value == null) return 0;

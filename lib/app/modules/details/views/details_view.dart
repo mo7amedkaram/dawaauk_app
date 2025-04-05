@@ -10,18 +10,20 @@ import '../../../components/error_view.dart';
 import '../../../components/medication_card.dart';
 
 class DetailsView extends GetView<DetailsController> {
+  const DetailsView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Obx(() => controller.medication.value != null
             ? Text(controller.medication.value!.tradeName)
-            : Text('تفاصيل الدواء')),
+            : const Text('تفاصيل الدواء')),
         centerTitle: true,
         elevation: 0,
         actions: [
           IconButton(
-            icon: Icon(Icons.share),
+            icon: const Icon(Icons.share),
             onPressed: () {
               // Implement share functionality
               Get.snackbar(
@@ -35,7 +37,7 @@ class DetailsView extends GetView<DetailsController> {
       ),
       body: controller.obx(
         (state) => _buildContent(context),
-        onLoading: Loader(message: 'جاري تحميل التفاصيل...'),
+        onLoading: const Loader(message: 'جاري تحميل التفاصيل...'),
         onError: (error) => ErrorView(
           message: controller.errorMessage.value,
           onRetry: controller.refreshData,
@@ -44,11 +46,11 @@ class DetailsView extends GetView<DetailsController> {
       floatingActionButton: Obx(() => controller.showCompareButton.value
           ? FloatingActionButton.extended(
               onPressed: controller.goToCompare,
-              icon: Icon(Icons.compare_arrows),
+              icon: const Icon(Icons.compare_arrows),
               label: Text('مقارنة (${controller.medicationsToCompare.length})'),
               tooltip: 'مقارنة الأدوية المحددة',
             )
-          : SizedBox.shrink()),
+          : const SizedBox.shrink()),
     );
   }
 
@@ -178,7 +180,7 @@ class DetailsView extends GetView<DetailsController> {
 
                 // Current price
                 Text(
-                  '${medication.currentPrice.toStringAsFixed(2)}',
+                  medication.currentPrice.toStringAsFixed(2),
                   style: theme.textTheme.titleLarge?.copyWith(
                     color: theme.colorScheme.primary,
                     fontWeight: FontWeight.bold,
@@ -198,7 +200,7 @@ class DetailsView extends GetView<DetailsController> {
                 if (hasDiscount) ...[
                   SizedBox(width: 12.w),
                   Text(
-                    '${medication.oldPrice!.toStringAsFixed(2)}',
+                    medication.oldPrice!.toStringAsFixed(2),
                     style: theme.textTheme.bodyMedium?.copyWith(
                       decoration: TextDecoration.lineThrough,
                       color: theme.colorScheme.error,
@@ -207,7 +209,7 @@ class DetailsView extends GetView<DetailsController> {
                   ),
 
                   // Discount percentage
-                  Spacer(),
+                  const Spacer(),
                   Container(
                     padding:
                         EdgeInsets.symmetric(horizontal: 8.r, vertical: 4.h),
@@ -238,11 +240,11 @@ class DetailsView extends GetView<DetailsController> {
       children: [
         // Tabs
         Obx(() {
-          return Container(
+          return SizedBox(
             height: 48,
             child: ListView(
               scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               children: [
                 _buildTabItem(context, 0, 'التفاصيل'),
                 _buildTabItem(context, 1, 'البدائل المكافئة'),
@@ -279,8 +281,8 @@ class DetailsView extends GetView<DetailsController> {
     return GestureDetector(
       onTap: () => controller.changeTab(index),
       child: Container(
-        margin: EdgeInsets.only(right: 16),
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        margin: const EdgeInsets.only(right: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           color: isSelected ? theme.colorScheme.primary : Colors.transparent,
           borderRadius: BorderRadius.circular(24),
@@ -307,8 +309,8 @@ class DetailsView extends GetView<DetailsController> {
     final theme = Theme.of(context);
 
     if (details == null) {
-      return Padding(
-        padding: const EdgeInsets.all(24.0),
+      return const Padding(
+        padding: EdgeInsets.all(24.0),
         child: Center(
           child: Text('لا توجد تفاصيل متاحة لهذا الدواء'),
         ),
@@ -323,36 +325,36 @@ class DetailsView extends GetView<DetailsController> {
           if (details.indications != null) ...[
             _buildDetailSection(
                 context, 'دواعي الاستعمال', details.indications!),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
           ],
           if (details.dosage != null) ...[
             _buildDetailSection(context, 'الجرعة', details.dosage!),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
           ],
           if (details.sideEffects != null) ...[
             _buildDetailSection(
                 context, 'الآثار الجانبية', details.sideEffects!),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
           ],
           if (details.contraindications != null) ...[
             _buildDetailSection(
                 context, 'موانع الاستعمال', details.contraindications!),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
           ],
           if (details.interactions != null) ...[
             _buildDetailSection(
                 context, 'التفاعلات الدوائية', details.interactions!),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
           ],
           if (details.storageInfo != null) ...[
             _buildDetailSection(
                 context, 'معلومات التخزين', details.storageInfo!),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
           ],
           if (details.usageInstructions != null) ...[
             _buildDetailSection(
                 context, 'إرشادات الاستخدام', details.usageInstructions!),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
           ],
         ],
       ),
@@ -464,14 +466,15 @@ class DetailsView extends GetView<DetailsController> {
                 '$title (${medications.length})',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              Spacer(),
+              const Spacer(),
               if (medications.length > 1)
                 ElevatedButton.icon(
                   onPressed: controller.goToCompare,
-                  icon: Icon(Icons.compare_arrows, size: 18),
-                  label: Text('مقارنة الكل'),
+                  icon: const Icon(Icons.compare_arrows, size: 18),
+                  label: const Text('مقارنة الكل'),
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   ),
                 ),
             ],
@@ -479,8 +482,8 @@ class DetailsView extends GetView<DetailsController> {
         ),
         ListView.builder(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          physics: const NeverScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           itemCount: medications.length,
           itemBuilder: (context, index) {
             final medication = medications[index];

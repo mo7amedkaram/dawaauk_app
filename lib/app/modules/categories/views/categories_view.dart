@@ -8,11 +8,13 @@ import '../../../components/error_view.dart';
 import '../../../components/category_card.dart';
 
 class CategoriesView extends GetView<CategoriesController> {
+  const CategoriesView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('تصنيفات الأدوية'),
+        title: const Text('تصنيفات الأدوية'),
         centerTitle: true,
         elevation: 0,
       ),
@@ -34,7 +36,7 @@ class CategoriesView extends GetView<CategoriesController> {
           Expanded(
             child: controller.obx(
               (state) => _buildCategoriesList(),
-              onLoading: Loader(message: 'جاري تحميل التصنيفات...'),
+              onLoading: const Loader(message: 'جاري تحميل التصنيفات...'),
               onError: (error) => ErrorView(
                 message: controller.errorMessage.value,
                 onRetry: controller.refreshData,
@@ -53,14 +55,14 @@ class CategoriesView extends GetView<CategoriesController> {
       },
       child: Obx(() {
         if (controller.filteredCategories.isEmpty) {
-          return Center(
+          return const Center(
             child: Text('لا توجد تصنيفات متطابقة مع البحث'),
           );
         }
 
         return GridView.builder(
-          padding: EdgeInsets.all(16),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          padding: const EdgeInsets.all(16),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             childAspectRatio: 0.8,
             crossAxisSpacing: 12,

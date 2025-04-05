@@ -56,7 +56,7 @@ class CategoryCard extends StatelessWidget {
               ),
             ),
 
-            Spacer(), // للحفاظ على موضع الزر في الأسفل
+            const Spacer(), // للحفاظ على موضع الزر في الأسفل
 
             // Button
             Padding(

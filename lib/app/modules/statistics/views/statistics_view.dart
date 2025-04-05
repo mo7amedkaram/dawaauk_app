@@ -1,24 +1,25 @@
 // lib/app/modules/statistics/views/statistics_view.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../controllers/statistics_controller.dart';
 import '../../../components/loader.dart';
 import '../../../components/error_view.dart';
 
 class StatisticsView extends GetView<StatisticsController> {
+  const StatisticsView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('إحصائيات الأدوية'),
+        title: const Text('إحصائيات الأدوية'),
         centerTitle: true,
         elevation: 0,
       ),
       body: controller.obx(
         (state) => _buildContent(context),
-        onLoading: Loader(message: 'جاري تحميل الإحصائيات...'),
+        onLoading: const Loader(message: 'جاري تحميل الإحصائيات...'),
         onError: (error) => ErrorView(
           message: controller.errorMessage.value,
           onRetry: controller.refreshData,
@@ -54,7 +55,7 @@ class StatisticsView extends GetView<StatisticsController> {
             // Price distribution chart
             _buildPriceDistributionChart(context),
 
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
           ],
         ),
       ),
@@ -65,14 +66,14 @@ class StatisticsView extends GetView<StatisticsController> {
     final theme = Theme.of(context);
 
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: theme.appBarTheme.backgroundColor,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 5,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -98,7 +99,6 @@ class StatisticsView extends GetView<StatisticsController> {
         padding: const EdgeInsets.symmetric(horizontal: 4.0),
         child: ElevatedButton(
           onPressed: () => controller.changePeriod(period),
-          child: Text(label),
           style: ElevatedButton.styleFrom(
             backgroundColor: isSelected
                 ? theme.colorScheme.primary
@@ -106,9 +106,10 @@ class StatisticsView extends GetView<StatisticsController> {
             foregroundColor:
                 isSelected ? Colors.white : theme.colorScheme.onSurface,
             elevation: isSelected ? 2 : 0,
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             textStyle: theme.textTheme.bodyMedium,
           ),
+          child: Text(label),
         ),
       );
     });
@@ -119,7 +120,7 @@ class StatisticsView extends GetView<StatisticsController> {
     final stats = controller.generalStats.value;
 
     if (stats == null) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
 
     return Padding(
@@ -131,11 +132,11 @@ class StatisticsView extends GetView<StatisticsController> {
             'إحصائيات عامة',
             style: theme.textTheme.titleLarge,
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           GridView.count(
             crossAxisCount: 2,
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             crossAxisSpacing: 16,
             mainAxisSpacing: 16,
             childAspectRatio: 1.5,
@@ -199,13 +200,13 @@ class StatisticsView extends GetView<StatisticsController> {
               color: color,
               size: 28,
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(
               title,
               style: theme.textTheme.bodyMedium,
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(
               value,
               style: theme.textTheme.titleLarge?.copyWith(
@@ -225,7 +226,7 @@ class StatisticsView extends GetView<StatisticsController> {
     final medications = controller.mostVisitedMedications;
 
     if (medications.isEmpty) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
 
     return Padding(
@@ -237,7 +238,7 @@ class StatisticsView extends GetView<StatisticsController> {
             'الأدوية الأكثر زيارة',
             style: theme.textTheme.titleLarge,
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Card(
             elevation: 3,
             shape: RoundedRectangleBorder(
@@ -245,9 +246,9 @@ class StatisticsView extends GetView<StatisticsController> {
             ),
             child: ListView.separated(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: medications.length > 5 ? 5 : medications.length,
-              separatorBuilder: (context, index) => Divider(height: 1),
+              separatorBuilder: (context, index) => const Divider(height: 1),
               itemBuilder: (context, index) {
                 final medication = medications[index];
                 return ListTile(
@@ -275,13 +276,14 @@ class StatisticsView extends GetView<StatisticsController> {
                   ),
                   subtitle: Text(medication.scientificName),
                   trailing: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: theme.colorScheme.primary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      '${_formatNumber(medication.visitCount ?? 0)}',
+                      _formatNumber(medication.visitCount ?? 0),
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.colorScheme.primary,
                         fontWeight: FontWeight.bold,
@@ -303,7 +305,7 @@ class StatisticsView extends GetView<StatisticsController> {
     final medications = controller.mostSearchedMedications;
 
     if (medications.isEmpty) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
 
     return Padding(
@@ -315,7 +317,7 @@ class StatisticsView extends GetView<StatisticsController> {
             'الأدوية الأكثر بحثاً',
             style: theme.textTheme.titleLarge,
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Card(
             elevation: 3,
             shape: RoundedRectangleBorder(
@@ -323,16 +325,16 @@ class StatisticsView extends GetView<StatisticsController> {
             ),
             child: ListView.separated(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: medications.length > 5 ? 5 : medications.length,
-              separatorBuilder: (context, index) => Divider(height: 1),
+              separatorBuilder: (context, index) => const Divider(height: 1),
               itemBuilder: (context, index) {
                 final medication = medications[index];
                 return ListTile(
                   leading: Container(
                     width: 32,
                     height: 32,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.orange,
                       shape: BoxShape.circle,
                     ),
@@ -352,7 +354,7 @@ class StatisticsView extends GetView<StatisticsController> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   subtitle: Text(medication.scientificName),
-                  trailing: Icon(Icons.arrow_forward_ios, size: 16),
+                  trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                   onTap: () => Get.toNamed('/details/${medication.id}'),
                 );
               },
@@ -368,7 +370,7 @@ class StatisticsView extends GetView<StatisticsController> {
     final searchTerms = controller.topSearchTerms;
 
     if (searchTerms.isEmpty) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
 
     return Padding(
@@ -380,7 +382,7 @@ class StatisticsView extends GetView<StatisticsController> {
             'عبارات البحث الشائعة',
             style: theme.textTheme.titleLarge,
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Card(
             elevation: 3,
             shape: RoundedRectangleBorder(
@@ -441,7 +443,7 @@ class StatisticsView extends GetView<StatisticsController> {
             'توزيع أسعار الأدوية',
             style: theme.textTheme.titleLarge,
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Card(
             elevation: 3,
             shape: RoundedRectangleBorder(
@@ -491,7 +493,7 @@ class StatisticsView extends GetView<StatisticsController> {
                             sideTitles: SideTitles(
                               showTitles: true,
                               getTitlesWidget: (value, meta) {
-                                if (value % 50 != 0) return SizedBox();
+                                if (value % 50 != 0) return const SizedBox();
                                 return Padding(
                                   padding: const EdgeInsets.only(right: 8.0),
                                   child: Text(
@@ -503,10 +505,10 @@ class StatisticsView extends GetView<StatisticsController> {
                               reservedSize: 30,
                             ),
                           ),
-                          topTitles: AxisTitles(
+                          topTitles: const AxisTitles(
                             sideTitles: SideTitles(showTitles: false),
                           ),
-                          rightTitles: AxisTitles(
+                          rightTitles: const AxisTitles(
                             sideTitles: SideTitles(showTitles: false),
                           ),
                         ),
@@ -524,7 +526,7 @@ class StatisticsView extends GetView<StatisticsController> {
                                     .toDouble(),
                                 color: theme.colorScheme.primary,
                                 width: 20,
-                                borderRadius: BorderRadius.vertical(
+                                borderRadius: const BorderRadius.vertical(
                                   top: Radius.circular(6),
                                 ),
                               ),
@@ -545,7 +547,7 @@ class StatisticsView extends GetView<StatisticsController> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     'نطاق السعر (ج.م)',
                     style: theme.textTheme.bodySmall?.copyWith(

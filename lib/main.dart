@@ -25,10 +25,12 @@ void main() async {
   ]);
 
   // Run the app
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Initialize dependencies
@@ -47,15 +49,15 @@ class MyApp extends StatelessWidget {
             theme: AppTheme.light,
             darkTheme: AppTheme.dark,
             themeMode: themeController.themeMode,
-            locale: Locale('ar', 'AE'),
+            locale: const Locale('ar', 'AE'),
             textDirection: TextDirection.rtl,
             defaultTransition: Transition.fade,
-            localizationsDelegates: [
+            localizationsDelegates: const [
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-            supportedLocales: [
+            supportedLocales: const [
               Locale('ar', 'AE'),
             ],
             debugShowCheckedModeBanner: false,
@@ -64,7 +66,8 @@ class MyApp extends StatelessWidget {
               ScreenUtil.init(context);
               return MediaQuery(
                 // التأكد من تطبيق حجم النص من إعدادات النظام
-                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                data: MediaQuery.of(context)
+                    .copyWith(textScaler: const TextScaler.linear(1.0)),
                 child: widget!,
               );
             },

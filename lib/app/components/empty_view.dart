@@ -1,6 +1,5 @@
 // lib/app/components/empty_view.dart
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 class EmptyView extends StatelessWidget {
@@ -15,6 +14,7 @@ class EmptyView extends StatelessWidget {
     this.actionText,
     this.onAction,
     this.isFullScreen = false,
+    required LottieBuilder customWidget,
   }) : super(key: key);
 
   @override

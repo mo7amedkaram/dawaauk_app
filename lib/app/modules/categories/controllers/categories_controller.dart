@@ -24,7 +24,7 @@ class CategoriesController extends GetxController
       (_) {
         filterCategories();
       },
-      time: Duration(milliseconds: 300),
+      time: const Duration(milliseconds: 300),
     );
   }
 

@@ -27,7 +27,7 @@ class SearchController extends GetxController with StateMixin<SearchResponse> {
   final RxString selectedCategory = ''.obs;
   final RxString selectedCompany = ''.obs;
   final RxString selectedScientificName = ''.obs;
-  final Rx<RangeValues> priceRange = RangeValues(0, 1000).obs;
+  final Rx<RangeValues> priceRange = const RangeValues(0, 1000).obs;
   final RxString selectedSortOption = 'relevance'.obs;
 
   // Pagination
@@ -54,7 +54,8 @@ class SearchController extends GetxController with StateMixin<SearchResponse> {
   void onInit() {
     super.onInit();
     loadFilterOptions();
-    debounce(searchQuery, (_) => search(), time: Duration(milliseconds: 500));
+    debounce(searchQuery, (_) => search(),
+        time: const Duration(milliseconds: 500));
 
     // Check if search query was passed
     if (Get.arguments != null && Get.arguments['query'] != null) {
@@ -89,7 +90,7 @@ class SearchController extends GetxController with StateMixin<SearchResponse> {
     selectedCategory.value = '';
     selectedCompany.value = '';
     selectedScientificName.value = '';
-    priceRange.value = RangeValues(0, 1000);
+    priceRange.value = const RangeValues(0, 1000);
     selectedSortOption.value = 'relevance';
     if (searchQuery.isNotEmpty) {
       search();

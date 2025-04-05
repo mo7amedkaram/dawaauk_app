@@ -1,9 +1,9 @@
 // lib/app/data/providers/api_provider.dart
 import 'package:get/get.dart';
 import 'package:get/get_connect/connect.dart';
-import '../models/medication_model.dart';
 
 class ApiProvider extends GetConnect {
+  @override
   final String baseUrl = 'https://ilsinitiative.org/pharmacy/api';
 
   @override
@@ -57,6 +57,19 @@ class ApiProvider extends GetConnect {
       'q': query,
       'page': page.toString(),
       'limit': limit.toString(),
+    });
+  }
+
+// Alternative si les endpoints spécifiques n'existent pas
+  Future<Response> getUpdatedMedications({required int since}) {
+    return get('/medications', query: {
+      'updated_after': since.toString(),
+    });
+  }
+
+  Future<Response> getUpdatedCategories({required int since}) {
+    return get('/categories', query: {
+      'updated_after': since.toString(),
     });
   }
 

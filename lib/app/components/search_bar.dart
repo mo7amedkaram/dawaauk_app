@@ -1,6 +1,5 @@
 // lib/app/components/search_bar.dart
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class AppSearchBar extends StatelessWidget {
   final TextEditingController controller;
@@ -33,7 +32,7 @@ class AppSearchBar extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
@@ -41,7 +40,7 @@ class AppSearchBar extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 10,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -51,14 +50,14 @@ class AppSearchBar extends StatelessWidget {
           if (showFilterButton && onFilterTap != null)
             IconButton(
               onPressed: onFilterTap,
-              icon: Icon(Icons.tune),
+              icon: const Icon(Icons.tune),
               tooltip: 'الفلاتر',
               padding: EdgeInsets.zero,
-              constraints: BoxConstraints(),
+              constraints: const BoxConstraints(),
               iconSize: 24,
             ),
 
-          if (showFilterButton && onFilterTap != null) SizedBox(width: 8),
+          if (showFilterButton && onFilterTap != null) const SizedBox(width: 8),
 
           // Search field
           Expanded(
@@ -76,7 +75,7 @@ class AppSearchBar extends StatelessWidget {
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.zero,
                 isDense: true,
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search),
                 suffixIcon: controller.text.isNotEmpty
                     ? IconButton(
                         onPressed: () {
@@ -84,9 +83,9 @@ class AppSearchBar extends StatelessWidget {
                           if (onClear != null) onClear!();
                           onChanged('');
                         },
-                        icon: Icon(Icons.clear),
+                        icon: const Icon(Icons.clear),
                         padding: EdgeInsets.zero,
-                        constraints: BoxConstraints(),
+                        constraints: const BoxConstraints(),
                         iconSize: 20,
                       )
                     : null,
@@ -96,7 +95,7 @@ class AppSearchBar extends StatelessWidget {
 
           // AI button
           if (showAiButton && onAiToggle != null) ...[
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             IconButton(
               onPressed: onAiToggle,
               icon: Icon(
@@ -105,7 +104,7 @@ class AppSearchBar extends StatelessWidget {
               ),
               tooltip: isAiEnabled ? 'تعطيل البحث الذكي' : 'تفعيل البحث الذكي',
               padding: EdgeInsets.zero,
-              constraints: BoxConstraints(),
+              constraints: const BoxConstraints(),
               iconSize: 24,
             ),
           ],

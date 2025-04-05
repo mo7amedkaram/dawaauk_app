@@ -7,19 +7,21 @@ import '../../../components/error_view.dart';
 import '../../../components/medication_card.dart';
 
 class CategoryDetailsView extends GetView<CategoryDetailsController> {
+  const CategoryDetailsView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Obx(() => controller.category.value != null
             ? Text(controller.category.value!.arabicName)
-            : Text('تفاصيل التصنيف')),
+            : const Text('تفاصيل التصنيف')),
         centerTitle: true,
         elevation: 0,
       ),
       body: controller.obx(
         (state) => _buildContent(context),
-        onLoading: Loader(message: 'جاري تحميل البيانات...'),
+        onLoading: const Loader(message: 'جاري تحميل البيانات...'),
         onError: (error) => ErrorView(
           message: controller.errorMessage.value,
           onRetry: controller.refreshData,
@@ -53,13 +55,13 @@ class CategoryDetailsView extends GetView<CategoryDetailsController> {
     final theme = Theme.of(context);
 
     return Card(
-      margin: EdgeInsets.all(16),
+      margin: const EdgeInsets.all(16),
       elevation: 3,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
       child: Container(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -68,14 +70,14 @@ class CategoryDetailsView extends GetView<CategoryDetailsController> {
               category.arabicName,
               style: theme.textTheme.headlineMedium,
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(
               category.name,
               style: theme.textTheme.titleMedium?.copyWith(
                 color: theme.colorScheme.primary,
               ),
             ),
-            Divider(height: 24),
+            const Divider(height: 24),
 
             // Category description
             Text(
@@ -93,8 +95,8 @@ class CategoryDetailsView extends GetView<CategoryDetailsController> {
       final medications = controller.medications;
 
       if (medications.isEmpty) {
-        return Padding(
-          padding: const EdgeInsets.all(24.0),
+        return const Padding(
+          padding: EdgeInsets.all(24.0),
           child: Center(
             child: Text('لا توجد أدوية في هذا التصنيف'),
           ),
@@ -119,16 +121,16 @@ class CategoryDetailsView extends GetView<CategoryDetailsController> {
                       'category': controller.category.value!.name,
                     });
                   },
-                  icon: Icon(Icons.filter_list, size: 18),
-                  label: Text('فلترة'),
+                  icon: const Icon(Icons.filter_list, size: 18),
+                  label: const Text('فلترة'),
                 ),
               ],
             ),
           ),
           ListView.builder(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.all(16),
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(16),
             itemCount: medications.length,
             itemBuilder: (context, index) {
               return Padding(

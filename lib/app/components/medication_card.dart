@@ -104,7 +104,7 @@ class MedicationCard extends StatelessWidget {
                     children: [
                       // Current price
                       Text(
-                        '${medication.currentPrice.toStringAsFixed(2)}',
+                        medication.currentPrice.toStringAsFixed(2),
                         style: theme.textTheme.titleLarge?.copyWith(
                           color: theme.colorScheme.primary,
                           fontWeight: FontWeight.bold,
@@ -124,7 +124,7 @@ class MedicationCard extends StatelessWidget {
                       if (hasDiscount) ...[
                         SizedBox(width: 8.w),
                         Text(
-                          '${medication.oldPrice!.toStringAsFixed(2)}',
+                          medication.oldPrice!.toStringAsFixed(2),
                           style: theme.textTheme.bodySmall?.copyWith(
                             decoration: TextDecoration.lineThrough,
                             color: theme.colorScheme.error,
@@ -133,7 +133,7 @@ class MedicationCard extends StatelessWidget {
                         ),
 
                         // Discount percentage
-                        Spacer(),
+                        const Spacer(),
                         Container(
                           padding: EdgeInsets.symmetric(
                               horizontal: 8.w, vertical: 4.h),
@@ -151,7 +151,7 @@ class MedicationCard extends StatelessWidget {
                           ),
                         ),
                       ] else
-                        Spacer(),
+                        const Spacer(),
                     ],
                   ),
                 ],

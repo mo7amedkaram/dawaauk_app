@@ -1,6 +1,5 @@
 // lib/app/components/error_view.dart
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 class ErrorView extends StatelessWidget {
@@ -37,8 +36,8 @@ class ErrorView extends StatelessWidget {
             padding: const EdgeInsets.only(top: 16.0),
             child: ElevatedButton.icon(
               onPressed: onRetry,
-              icon: Icon(Icons.refresh),
-              label: Text('إعادة المحاولة'),
+              icon: const Icon(Icons.refresh),
+              label: const Text('إعادة المحاولة'),
             ),
           ),
       ],
